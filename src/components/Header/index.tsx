@@ -9,10 +9,10 @@ export function Header() {
       <Logo />
       <nav>
         <NavLink to={'/'} title="Timer">
-          <Timer size={24} />
+          <Timer size={26} />
         </NavLink>
         <NavLink to={'/historico'} title="Histórico">
-          <Scroll size={24} />
+          <Scroll size={26} />
         </NavLink>
       </nav>
     </HeaderContainer>
