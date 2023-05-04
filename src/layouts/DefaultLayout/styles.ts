@@ -6,7 +6,7 @@ export const LayoutContainer = styled.div`
 
   margin: 5rem auto;
 
-  padding: 2.5rem;
+  padding: 2.5rem 6rem;
 
   background: ${(props) => props.theme['gray-800']};
 
@@ -14,8 +14,9 @@ export const LayoutContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+  align-items: center;
 
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     margin: 2rem;
-  }
+  } */
 `

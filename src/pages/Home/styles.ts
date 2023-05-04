@@ -4,6 +4,7 @@ export const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  max-width: 40.625rem;
   align-items: center;
   justify-content: center;
   margin-top: -3rem;
@@ -15,6 +16,7 @@ export const HomeContainer = styled.div`
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    width: 100%;
 
     flex-wrap: wrap;
 
@@ -56,7 +58,7 @@ export const HomeContainer = styled.div`
     justify-content: center;
 
     padding: 1.25rem;
-    width: 40rem;
+    width: 100%;
     border-radius: 8px;
     border: 0;
     gap: 0.5rem;
@@ -70,6 +72,8 @@ export const HomeContainer = styled.div`
 export const CounterContainer = styled.main`
   display: flex;
   gap: 1rem;
+
+  width: 100%;
 
   font-family: 'Roboto-mono', monospace;
   font-size: 10rem;
