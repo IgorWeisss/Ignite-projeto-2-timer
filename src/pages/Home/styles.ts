@@ -3,101 +3,101 @@ import styled from 'styled-components'
 export const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1;
-  max-width: 40.625rem;
   align-items: center;
   justify-content: center;
+
   margin-top: -3rem;
-
   gap: 3.5rem;
+  width: 100%;
+  max-width: 41rem;
+  height: 100%;
 
-  form {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
+  @media (max-width: 768px) {
+    padding: 0 2rem;
+  }
+`
 
-    flex-wrap: wrap;
+export const HomeContent = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.5rem;
 
-    -webkit-font-smoothing: antialiased;
-    font-size: 1.125rem;
-    font-weight: bold;
-    line-height: 1.6;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  line-height: 1.6;
+  font-size: 1.125rem;
+
+  label,
+  span {
     color: ${(props) => props.theme['gray-100']};
   }
 
-  form input {
-    padding: 0.5rem 0.6875rem;
-
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.125rem;
-    font-weight: bold;
-
+  input {
+    padding: 0.6875rem 0.5rem;
     background-color: transparent;
     border: 0;
     border-bottom: 2px solid ${(props) => props.theme['gray-500']};
     color: ${(props) => props.theme['gray-100']};
-  }
 
-  form::placeholder {
-    color: ${(props) => props.theme['gray-500']};
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 1.125rem;
   }
 
   #projectName {
-    width: 16.875rem;
+    flex:1;
   }
 
   #minutesAmount {
-    width: 4.625rem;
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 1.25rem;
-    width: 100%;
-    border-radius: 8px;
-    border: 0;
-    gap: 0.5rem;
-    cursor: pointer;
-
-    background-color: ${(props) => props.theme['green-500']};
-    color: ${(props) => props.theme['gray-100']};
+    width: 4.5rem;
   }
 `
 
 export const CounterContainer = styled.main`
   display: flex;
-  gap: 1rem;
-
+  justify-content: center;
   width: 100%;
 
   font-family: 'Roboto-mono', monospace;
   font-size: 10rem;
-  line-height: 7.5rem;
   font-weight: bold;
+  line-height: 12.5rem;
 
-  span {
+  .numbers {
     display: flex;
-    padding: 2.5rem 1rem;
-    width: 8rem;
-    align-items: center;
-    justify-content: center;
+    gap: 1rem;
+  }
+
+  .numbers span {
+    padding: 0 1.25rem;
 
     background-color: ${(props) => props.theme['gray-700']};
     border-radius: 8px;
   }
+
+  .separator {
+    flex: 1;
+    text-align: center;
+    color: ${(props) => props.theme['green-500']};
+  }
 `
 
-export const CounterSeparator = styled.div`
+export const ButtonContainer = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4.5rem;
 
-  font-family: 'Roboto-mono', monospace;
-  color: ${(props) => props.theme['green-500']};
+  font-weight: bold;
+
+  width: 100%;
+  padding: 1.25rem;
+  gap: 0.5rem;
+
+  border: 0;
+  border-radius: 8px;
+
+  background-color: ${(props) => props.theme['green-500']};
+  color: ${(props) => props.theme['gray-100']};
 `
