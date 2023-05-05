@@ -3,23 +3,39 @@ import {
   ButtonContainer,
   CounterContainer,
   HomeContainer,
-  HomeContent,
+  FormContainer,
 } from './styles'
 
 export function Home() {
   return (
     <HomeContainer>
-      <HomeContent>
+      <FormContainer id="homeForm">
         <label htmlFor="projectName">Vou trabalhar em</label>
         <input
           type="text"
           id="projectName"
           placeholder="Dê um nome para o seu projeto"
+          list="sugestionsList"
+          autoComplete="off"
         />
+
+        <datalist id="sugestionsList">
+          <option value="Front-end" />
+          <option value="Back-end" />
+          <option value="Full-Stack" />
+        </datalist>
+
         <label htmlFor="minutesAmount">durante</label>
-        <input type="number" id="minutesAmount" placeholder="00" />
+        <input
+          type="number"
+          id="minutesAmount"
+          placeholder="00"
+          min={5}
+          max={60}
+          step={5}
+        />
         <span>minutos.</span>
-      </HomeContent>
+      </FormContainer>
       <CounterContainer>
         <div className="numbers">
           <span>0</span>
@@ -31,7 +47,7 @@ export function Home() {
           <span>0</span>
         </div>
       </CounterContainer>
-      <ButtonContainer>
+      <ButtonContainer type="submit" form="homeForm">
         <Play size={26} />
         Começar
       </ButtonContainer>

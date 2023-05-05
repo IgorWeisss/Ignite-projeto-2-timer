@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const HomeContainer = styled.div`
+export const HomeContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,7 +17,7 @@ export const HomeContainer = styled.div`
   }
 `
 
-export const HomeContent = styled.div`
+export const FormContainer = styled.form`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -44,10 +44,23 @@ export const HomeContent = styled.div`
     font-family: 'Roboto', sans-serif;
     font-weight: bold;
     font-size: 1.125rem;
+
+    &::-webkit-calendar-picker-indicator {
+      display: none !important;
+    }
+  }
+
+  input::placeholder {
+    color: ${(props) => props.theme['gray-500']};
+  }
+
+  input:focus {
+    box-shadow: none;
+    border-color: ${(props) => props.theme['green-500']};
   }
 
   #projectName {
-    flex:1;
+    flex: 1;
   }
 
   #minutesAmount {
@@ -55,12 +68,12 @@ export const HomeContent = styled.div`
   }
 `
 
-export const CounterContainer = styled.main`
+export const CounterContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
 
-  font-family: 'Roboto-mono', monospace;
+  font-family: 'Roboto mono', monospace;
   font-size: 10rem;
   font-weight: bold;
   line-height: 12.5rem;
@@ -71,9 +84,10 @@ export const CounterContainer = styled.main`
   }
 
   .numbers span {
-    padding: 0 1.25rem;
+    padding: 0 1rem;
 
     background-color: ${(props) => props.theme['gray-700']};
+    color: ${(props) => props.theme['gray-100']};
     border-radius: 8px;
   }
 
@@ -97,7 +111,17 @@ export const ButtonContainer = styled.button`
 
   border: 0;
   border-radius: 8px;
+  cursor: pointer;
 
   background-color: ${(props) => props.theme['green-500']};
   color: ${(props) => props.theme['gray-100']};
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
+    background-color: ${(props) => props.theme['green-700']};
+  }
 `
