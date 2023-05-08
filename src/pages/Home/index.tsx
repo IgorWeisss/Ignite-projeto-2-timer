@@ -5,11 +5,20 @@ import {
   HomeContainer,
   FormContainer,
 } from './styles'
+import { useForm } from 'react-hook-form'
+
+function handleCreateNewTask(data: any) {
+  console.log(data)
+}
 
 export function Home() {
+  const { register, handleSubmit, watch } = useForm()
+  const projectName = watch('projectName')
+  const isSubmitButtonDisabled = !projectName
+
   return (
     <HomeContainer>
-      <FormContainer id="homeForm">
+      <FormContainer id="homeForm" onSubmit={handleSubmit(handleCreateNewTask)}>
         <label htmlFor="projectName">Vou trabalhar em</label>
         <input
           type="text"
@@ -17,6 +26,7 @@ export function Home() {
           placeholder="Dê um nome para o seu projeto"
           list="sugestionsList"
           autoComplete="off"
+          {...register('projectName')}
         />
 
         <datalist id="sugestionsList">
@@ -33,6 +43,7 @@ export function Home() {
           min={5}
           max={60}
           step={5}
+          {...register('minutesAmount', { valueAsNumber: true })}
         />
         <span>minutos.</span>
       </FormContainer>
@@ -47,7 +58,11 @@ export function Home() {
           <span>0</span>
         </div>
       </CounterContainer>
-      <ButtonContainer type="submit" form="homeForm">
+      <ButtonContainer
+        disabled={isSubmitButtonDisabled}
+        type="submit"
+        form="homeForm"
+      >
         <Play size={26} />
         Começar
       </ButtonContainer>
