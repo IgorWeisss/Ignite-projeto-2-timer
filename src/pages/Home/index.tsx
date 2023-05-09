@@ -5,14 +5,28 @@ import {
   HomeContainer,
   FormContainer,
 } from './styles'
-import { useForm } from 'react-hook-form'
 
-function handleCreateNewTask(data: any) {
-  console.log(data)
-}
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+const newTaskFormValidationSchema = z.object({
+  projectName: z.string().min(1, 'Informe o nome do projeto'),
+  minutesAmount: z
+    .number()
+    .min(5, 'A duração mínima é de 5 minutos')
+    .max(60, 'A duração máxima é de 60 minutos'),
+})
 
 export function Home() {
-  const { register, handleSubmit, watch } = useForm()
+  const { register, handleSubmit, watch } = useForm({
+    resolver: zodResolver(newTaskFormValidationSchema),
+  })
+
+  function handleCreateNewTask(data: any) {
+    console.log(data)
+  }
+
   const projectName = watch('projectName')
   const isSubmitButtonDisabled = !projectName
 
