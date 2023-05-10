@@ -18,13 +18,20 @@ const newTaskFormValidationSchema = z.object({
     .max(60, 'A duração máxima é de 60 minutos'),
 })
 
+type NewTaskFormData = z.infer<typeof newTaskFormValidationSchema>
+
 export function Home() {
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, reset } = useForm<NewTaskFormData>({
     resolver: zodResolver(newTaskFormValidationSchema),
+    defaultValues: {
+      projectName: '',
+      minutesAmount: 0,
+    },
   })
 
-  function handleCreateNewTask(data: any) {
+  function handleCreateNewTask(data: NewTaskFormData) {
     console.log(data)
+    reset()
   }
 
   const projectName = watch('projectName')
@@ -57,6 +64,7 @@ export function Home() {
           min={5}
           max={60}
           step={5}
+          required
           {...register('minutesAmount', { valueAsNumber: true })}
         />
         <span>minutos.</span>
