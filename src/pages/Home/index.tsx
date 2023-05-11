@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -30,6 +30,22 @@ interface Tasks {
 export function Home() {
   const [tasks, setTasks] = useState<Tasks[]>([])
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
+  const [secondsPassed, setSecondsPassed] = useState(0)
+
+  // useEffect(() => {
+  //   if (secondsLeft === 0) {
+  //     setSecondsPassed(0)
+  //     setActiveTaskId(null)
+  //     return
+  //   }
+
+  //   if (activeTaskId) {
+  //     console.log('Iniciando')
+  //     setTimeout(() => {
+  //       setSecondsPassed((state) => state + 1)
+  //     }, 1000)
+  //   }
+  // }, [activeTaskId, secondsPassed])
 
   const { register, handleSubmit, watch, reset } = useForm<NewTaskFormData>({
     resolver: zodResolver(newTaskFormValidationSchema),
@@ -56,7 +72,13 @@ export function Home() {
   const isSubmitButtonDisabled = !projectName
   const activeTask = tasks.find((task) => task.id === activeTaskId)
 
-  console.log(activeTask)
+  const taskTotalTimeInSeconds = activeTask ? activeTask.minutesAmount * 60 : 0
+  const secondsLeft = taskTotalTimeInSeconds - secondsPassed
+  const totalTimeInMinutes = Math.floor(secondsLeft / 60)
+  const totalTimeInSeconds = secondsLeft % 60
+
+  const minutesDisplayed = String(totalTimeInMinutes).padStart(2, '0')
+  const secondsDisplayed = String(totalTimeInSeconds).padStart(2, '0')
 
   return (
     <HomeContainer>
@@ -92,13 +114,13 @@ export function Home() {
       </FormContainer>
       <CounterContainer>
         <div className="numbers">
-          <span>0</span>
-          <span>0</span>
+          <span>{minutesDisplayed[0]}</span>
+          <span>{minutesDisplayed[1]}</span>
         </div>
         <span className="separator">:</span>
         <div className="numbers">
-          <span>0</span>
-          <span>0</span>
+          <span>{secondsDisplayed[0]}</span>
+          <span>{secondsDisplayed[1]}</span>
         </div>
       </CounterContainer>
       <ButtonContainer
