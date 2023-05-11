@@ -1,3 +1,8 @@
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
 import { Play } from 'phosphor-react'
 import {
   ButtonContainer,
@@ -5,10 +10,6 @@ import {
   HomeContainer,
   FormContainer,
 } from './styles'
-
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
 const newTaskFormValidationSchema = z.object({
   projectName: z.string().min(1, 'Informe o nome do projeto'),
@@ -20,7 +21,16 @@ const newTaskFormValidationSchema = z.object({
 
 type NewTaskFormData = z.infer<typeof newTaskFormValidationSchema>
 
+interface Tasks {
+  id: string
+  projectName: string
+  minutesAmount: number
+}
+
 export function Home() {
+  const [tasks, setTasks] = useState<Tasks[]>([])
+  const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
+
   const { register, handleSubmit, watch, reset } = useForm<NewTaskFormData>({
     resolver: zodResolver(newTaskFormValidationSchema),
     defaultValues: {
@@ -30,12 +40,23 @@ export function Home() {
   })
 
   function handleCreateNewTask(data: NewTaskFormData) {
-    console.log(data)
+    const newTask: Tasks = {
+      id: String(new Date().getTime()),
+      projectName: data.projectName,
+      minutesAmount: data.minutesAmount,
+    }
+
+    setTasks((state) => [...state, newTask])
+    setActiveTaskId(newTask.id)
+
     reset()
   }
 
   const projectName = watch('projectName')
   const isSubmitButtonDisabled = !projectName
+  const activeTask = tasks.find((task) => task.id === activeTaskId)
+
+  console.log(activeTask)
 
   return (
     <HomeContainer>
