@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Play } from 'phosphor-react'
+import { Minus, Play, Plus } from 'phosphor-react'
 import {
   ButtonContainer,
   CounterContainer,
@@ -45,20 +45,27 @@ export function Home() {
   const secondsDisplayed = String(totalTimeInSeconds).padStart(2, '0')
 
   useEffect(() => {
+    let interval: number
+
     if (activeTask) {
-      setInterval(() => {
+      interval = setInterval(() => {
         setSecondsPassed(differenceInSeconds(new Date(), activeTask.startTime))
       }, 1000)
     }
+
+    return () => {
+      clearInterval(interval)
+    }
   }, [activeTask])
 
-  const { register, handleSubmit, watch, reset } = useForm<NewTaskFormData>({
-    resolver: zodResolver(newTaskFormValidationSchema),
-    defaultValues: {
-      projectName: '',
-      minutesAmount: 0,
-    },
-  })
+  const { register, handleSubmit, watch, reset, getValues, setValue } =
+    useForm<NewTaskFormData>({
+      resolver: zodResolver(newTaskFormValidationSchema),
+      defaultValues: {
+        projectName: '',
+        minutesAmount: 0,
+      },
+    })
 
   const projectName = watch('projectName')
   const isSubmitButtonDisabled = !projectName
@@ -73,8 +80,23 @@ export function Home() {
 
     setTasks((state) => [...state, newTask])
     setActiveTaskId(newTask.id)
+    setSecondsPassed(0)
 
     reset()
+  }
+
+  function handleIncrementMinutesAmount() {
+    const actualValue = getValues('minutesAmount')
+    const newValue = actualValue + 5
+
+    setValue('minutesAmount', newValue)
+  }
+
+  function handleDecrementMinutesAmount() {
+    const actualValue = getValues('minutesAmount')
+    const newValue = actualValue - 5
+
+    setValue('minutesAmount', newValue)
   }
 
   return (
@@ -97,16 +119,32 @@ export function Home() {
         </datalist>
 
         <label htmlFor="minutesAmount">durante</label>
-        <input
-          type="number"
-          id="minutesAmount"
-          placeholder="00"
-          min={5}
-          max={60}
-          step={5}
-          required
-          {...register('minutesAmount', { valueAsNumber: true })}
-        />
+        <div>
+          <button
+            className="decrementButton"
+            onClick={handleDecrementMinutesAmount}
+            type="button"
+          >
+            <Minus size={16} />
+          </button>
+          <input
+            type="number"
+            id="minutesAmount"
+            placeholder="00"
+            min={5}
+            max={60}
+            step={5}
+            required
+            {...register('minutesAmount', { valueAsNumber: true })}
+          />
+          <button
+            className="incrementButton"
+            onClick={handleIncrementMinutesAmount}
+            type="button"
+          >
+            <Plus size={16} />
+          </button>
+        </div>
         <span>minutos.</span>
       </FormContainer>
       <CounterContainer>

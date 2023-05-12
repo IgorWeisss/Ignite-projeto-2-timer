@@ -50,6 +50,17 @@ export const FormContainer = styled.form`
     }
   }
 
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+
   input::placeholder {
     color: ${(props) => props.theme['gray-500']};
   }
@@ -59,12 +70,42 @@ export const FormContainer = styled.form`
     border-color: ${(props) => props.theme['green-500']};
   }
 
+  div {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 4.5rem;
+    gap: 0.5rem;
+  }
+
+  button {
+    position: absolute;
+    background-color: transparent;
+    border: 0;
+    color: ${(props) => props.theme['gray-500']};
+    width: 1rem;
+    transition: color 0.2s;
+  }
+
+  button:hover {
+    color: ${(props) => props.theme['gray-100']};
+  }
+
+  div .decrementButton {
+    left: 0.15625rem;
+  }
+
+  div .incrementButton {
+    right: 0.15625rem;
+  }
+
   #projectName {
     flex: 1;
   }
 
   #minutesAmount {
-    width: 4.5rem;
+    width: 100%;
+    text-align: center;
   }
 `
 
