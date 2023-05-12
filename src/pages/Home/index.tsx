@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+
 import { z } from 'zod'
+import { differenceInSeconds } from 'date-fns'
 
 import { HandPalm, Minus, Play, Plus } from 'phosphor-react'
 import {
@@ -11,7 +13,6 @@ import {
   StopButtonContainer,
   StartButtonContainer,
 } from './styles'
-import { differenceInSeconds } from 'date-fns'
 
 const newTaskFormValidationSchema = z.object({
   projectName: z.string().min(1, 'Informe o nome do projeto'),
@@ -29,6 +30,7 @@ interface Tasks {
   minutesAmount: number
   startTime: Date
   interruptedTime?: Date
+  finishedTime?: Date
 }
 
 export function Home() {
@@ -51,19 +53,42 @@ export function Home() {
 
     if (activeTask) {
       interval = setInterval(() => {
-        setSecondsPassed(differenceInSeconds(new Date(), activeTask.startTime))
+        const secondsDifference = differenceInSeconds(
+          new Date(),
+          activeTask.startTime,
+        )
+        if (secondsDifference >= taskTotalTimeInSeconds) {
+          setTasks((state) =>
+            state.map((task) => {
+              if (task.id === activeTaskId) {
+                return {
+                  ...task,
+                  finishedTime: new Date(),
+                }
+              }
+
+              return task
+            }),
+          )
+          setSecondsPassed(taskTotalTimeInSeconds)
+          setActiveTaskId(null)
+          clearInterval(interval)
+        }
+        setSecondsPassed(secondsDifference)
       }, 1000)
     }
 
     return () => {
       clearInterval(interval)
     }
-  }, [activeTask])
+  }, [activeTask, activeTaskId, taskTotalTimeInSeconds])
 
   useEffect(() => {
     if (activeTask) {
-      document.title = `Timer - ${minutesDisplayed}:${secondsDisplayed}`
+      document.title = `${activeTask.projectName} - ${minutesDisplayed}:${secondsDisplayed}`
+      return
     }
+    document.title = 'Ignite Timer'
   }, [activeTask, minutesDisplayed, secondsDisplayed])
 
   const { register, handleSubmit, watch, reset, getValues, setValue } =
@@ -118,8 +143,8 @@ export function Home() {
   }
 
   function handleInterruptTask() {
-    setTasks(
-      tasks.map((task) => {
+    setTasks((state) =>
+      state.map((task) => {
         if (task.id === activeTaskId) {
           return {
             ...task,
@@ -130,11 +155,8 @@ export function Home() {
         return task
       }),
     )
-    // setSecondsPassed(0)
     setActiveTaskId(null)
   }
-
-  console.log(tasks)
 
   return (
     <HomeContainer>
