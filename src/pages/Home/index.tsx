@@ -3,12 +3,13 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { Minus, Play, Plus } from 'phosphor-react'
+import { HandPalm, Minus, Play, Plus } from 'phosphor-react'
 import {
-  ButtonContainer,
   CounterContainer,
   HomeContainer,
   FormContainer,
+  StopButtonContainer,
+  StartButtonContainer,
 } from './styles'
 import { differenceInSeconds } from 'date-fns'
 
@@ -27,6 +28,7 @@ interface Tasks {
   projectName: string
   minutesAmount: number
   startTime: Date
+  interruptedTime?: Date
 }
 
 export function Home() {
@@ -58,12 +60,18 @@ export function Home() {
     }
   }, [activeTask])
 
+  useEffect(() => {
+    if (activeTask) {
+      document.title = `Timer - ${minutesDisplayed}:${secondsDisplayed}`
+    }
+  }, [activeTask, minutesDisplayed, secondsDisplayed])
+
   const { register, handleSubmit, watch, reset, getValues, setValue } =
     useForm<NewTaskFormData>({
       resolver: zodResolver(newTaskFormValidationSchema),
       defaultValues: {
         projectName: '',
-        minutesAmount: 0,
+        // minutesAmount: 0,
       },
     })
 
@@ -86,7 +94,15 @@ export function Home() {
   }
 
   function handleIncrementMinutesAmount() {
-    const actualValue = getValues('minutesAmount')
+    let actualValue = getValues('minutesAmount')
+
+    if (actualValue === 60) {
+      return
+    }
+    if (!actualValue) {
+      actualValue = 0
+    }
+
     const newValue = actualValue + 5
 
     setValue('minutesAmount', newValue)
@@ -94,10 +110,32 @@ export function Home() {
 
   function handleDecrementMinutesAmount() {
     const actualValue = getValues('minutesAmount')
+    if (actualValue === 5) {
+      return
+    }
     const newValue = actualValue - 5
 
     setValue('minutesAmount', newValue)
   }
+
+  function handleInterruptTask() {
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === activeTaskId) {
+          return {
+            ...task,
+            interruptedTime: new Date(),
+          }
+        }
+
+        return task
+      }),
+    )
+    // setSecondsPassed(0)
+    setActiveTaskId(null)
+  }
+
+  console.log(tasks)
 
   return (
     <HomeContainer>
@@ -109,6 +147,7 @@ export function Home() {
           placeholder="Dê um nome para o seu projeto"
           list="sugestionsList"
           autoComplete="off"
+          disabled={!!activeTask}
           {...register('projectName')}
         />
 
@@ -135,6 +174,7 @@ export function Home() {
             max={60}
             step={5}
             required
+            disabled={!!activeTask}
             {...register('minutesAmount', { valueAsNumber: true })}
           />
           <button
@@ -158,14 +198,21 @@ export function Home() {
           <span>{secondsDisplayed[1]}</span>
         </div>
       </CounterContainer>
-      <ButtonContainer
-        disabled={isSubmitButtonDisabled}
-        type="submit"
-        form="homeForm"
-      >
-        <Play size={26} />
-        Começar
-      </ButtonContainer>
+      {activeTask ? (
+        <StopButtonContainer type="button" onClick={handleInterruptTask}>
+          <HandPalm size={26} />
+          Interromper
+        </StopButtonContainer>
+      ) : (
+        <StartButtonContainer
+          disabled={isSubmitButtonDisabled}
+          type="submit"
+          form="homeForm"
+        >
+          <Play size={26} />
+          Começar
+        </StartButtonContainer>
+      )}
     </HomeContainer>
   )
 }

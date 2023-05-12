@@ -139,7 +139,7 @@ export const CounterContainer = styled.div`
   }
 `
 
-export const ButtonContainer = styled.button`
+export const BaseButtonContainer = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,15 +154,26 @@ export const ButtonContainer = styled.button`
   border-radius: 8px;
   cursor: pointer;
 
-  background-color: ${(props) => props.theme['green-500']};
   color: ${(props) => props.theme['gray-100']};
 
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
   }
+`
+
+export const StartButtonContainer = styled(BaseButtonContainer)`
+  background-color: ${(props) => props.theme['green-500']};
 
   &:not(:disabled):hover {
     background-color: ${(props) => props.theme['green-700']};
+  }
+`
+
+export const StopButtonContainer = styled(BaseButtonContainer)`
+  background-color: ${(props) => props.theme['red-500']};
+
+  &:not(:disabled):hover {
+    background-color: ${(props) => props.theme['red-700']};
   }
 `
