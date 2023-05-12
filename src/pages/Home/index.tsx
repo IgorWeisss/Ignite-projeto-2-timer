@@ -39,7 +39,7 @@ export function Home() {
   const activeTask = tasks.find((task) => task.id === activeTaskId)
 
   const taskTotalTimeInSeconds = activeTask ? activeTask.minutesAmount * 60 : 0
-  const secondsLeft = taskTotalTimeInSeconds - secondsPassed
+  const secondsLeft = activeTask ? taskTotalTimeInSeconds - secondsPassed : 0
   const totalTimeInMinutes = Math.floor(secondsLeft / 60)
   const totalTimeInSeconds = secondsLeft % 60
 
@@ -88,7 +88,6 @@ export function Home() {
 
     setTasks((state) => [...state, newTask])
     setActiveTaskId(newTask.id)
-    setSecondsPassed(0)
 
     reset()
   }
