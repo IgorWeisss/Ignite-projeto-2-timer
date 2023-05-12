@@ -10,6 +10,7 @@ import {
   HomeContainer,
   FormContainer,
 } from './styles'
+import { differenceInSeconds } from 'date-fns'
 
 const newTaskFormValidationSchema = z.object({
   projectName: z.string().min(1, 'Informe o nome do projeto'),
@@ -25,6 +26,7 @@ interface Tasks {
   id: string
   projectName: string
   minutesAmount: number
+  startTime: Date
 }
 
 export function Home() {
@@ -32,44 +34,6 @@ export function Home() {
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
   const [secondsPassed, setSecondsPassed] = useState(0)
 
-  // useEffect(() => {
-  //   if (secondsLeft === 0) {
-  //     setSecondsPassed(0)
-  //     setActiveTaskId(null)
-  //     return
-  //   }
-
-  //   if (activeTaskId) {
-  //     console.log('Iniciando')
-  //     setTimeout(() => {
-  //       setSecondsPassed((state) => state + 1)
-  //     }, 1000)
-  //   }
-  // }, [activeTaskId, secondsPassed])
-
-  const { register, handleSubmit, watch, reset } = useForm<NewTaskFormData>({
-    resolver: zodResolver(newTaskFormValidationSchema),
-    defaultValues: {
-      projectName: '',
-      minutesAmount: 0,
-    },
-  })
-
-  function handleCreateNewTask(data: NewTaskFormData) {
-    const newTask: Tasks = {
-      id: String(new Date().getTime()),
-      projectName: data.projectName,
-      minutesAmount: data.minutesAmount,
-    }
-
-    setTasks((state) => [...state, newTask])
-    setActiveTaskId(newTask.id)
-
-    reset()
-  }
-
-  const projectName = watch('projectName')
-  const isSubmitButtonDisabled = !projectName
   const activeTask = tasks.find((task) => task.id === activeTaskId)
 
   const taskTotalTimeInSeconds = activeTask ? activeTask.minutesAmount * 60 : 0
@@ -79,6 +43,39 @@ export function Home() {
 
   const minutesDisplayed = String(totalTimeInMinutes).padStart(2, '0')
   const secondsDisplayed = String(totalTimeInSeconds).padStart(2, '0')
+
+  useEffect(() => {
+    if (activeTask) {
+      setInterval(() => {
+        setSecondsPassed(differenceInSeconds(new Date(), activeTask.startTime))
+      }, 1000)
+    }
+  }, [activeTask])
+
+  const { register, handleSubmit, watch, reset } = useForm<NewTaskFormData>({
+    resolver: zodResolver(newTaskFormValidationSchema),
+    defaultValues: {
+      projectName: '',
+      minutesAmount: 0,
+    },
+  })
+
+  const projectName = watch('projectName')
+  const isSubmitButtonDisabled = !projectName
+
+  function handleCreateNewTask(data: NewTaskFormData) {
+    const newTask: Tasks = {
+      id: String(new Date().getTime()),
+      projectName: data.projectName,
+      minutesAmount: data.minutesAmount,
+      startTime: new Date(),
+    }
+
+    setTasks((state) => [...state, newTask])
+    setActiveTaskId(newTask.id)
+
+    reset()
+  }
 
   return (
     <HomeContainer>
