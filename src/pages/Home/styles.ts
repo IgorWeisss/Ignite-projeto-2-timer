@@ -12,6 +12,14 @@ export const HomeContainer = styled.main`
   max-width: 41rem;
   height: 100%;
 
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3.5rem;
+    width: 100%;
+  }
+
   @media (max-width: 768px) {
     padding: 0 2rem;
   }

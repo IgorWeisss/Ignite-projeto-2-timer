@@ -73,32 +73,34 @@ export function Home() {
 
   return (
     <HomeContainer>
-      <TasksContext.Provider
-        value={{
-          activeTask,
-          activeTaskId,
-          markCurrentTaskAsFinished,
-          updateTasksAndTaskId,
-        }}
-      >
-        <NewTaskForm />
-        <Countdown />
-        {activeTask ? (
-          <StopButtonContainer type="button" onClick={handleInterruptTask}>
-            <HandPalm size={26} />
-            Interromper
-          </StopButtonContainer>
-        ) : (
-          <StartButtonContainer
-            // disabled={isSubmitButtonDisabled}
-            type="submit"
-            form="homeForm"
-          >
-            <Play size={26} />
-            Começar
-          </StartButtonContainer>
-        )}
-      </TasksContext.Provider>
+      <form>
+        <TasksContext.Provider
+          value={{
+            activeTask,
+            activeTaskId,
+            markCurrentTaskAsFinished,
+            updateTasksAndTaskId,
+          }}
+        >
+          <NewTaskForm />
+          <Countdown />
+          {activeTask ? (
+            <StopButtonContainer type="button" onClick={handleInterruptTask}>
+              <HandPalm size={26} />
+              Interromper
+            </StopButtonContainer>
+          ) : (
+            <StartButtonContainer
+              // disabled={isSubmitButtonDisabled}
+              type="submit"
+              form="homeForm"
+            >
+              <Play size={26} />
+              Começar
+            </StartButtonContainer>
+          )}
+        </TasksContext.Provider>
+      </form>
     </HomeContainer>
   )
 }
