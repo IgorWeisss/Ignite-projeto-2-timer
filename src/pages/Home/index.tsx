@@ -25,7 +25,9 @@ export interface Tasks {
 interface TaskContextData {
   activeTask: Tasks | undefined
   activeTaskId: string | null
+  secondsPassed: number
   markCurrentTaskAsFinished: () => void
+  updateSecondsPassed: (seconds: number) => void
 }
 
 export const TasksContext = createContext({} as TaskContextData)
@@ -43,6 +45,11 @@ export type NewTaskFormData = z.infer<typeof newTaskFormValidationSchema>
 export function Home() {
   const [tasks, setTasks] = useState<Tasks[]>([])
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null)
+  const [secondsPassed, setSecondsPassed] = useState(0)
+
+  function updateSecondsPassed(seconds: number) {
+    setSecondsPassed(seconds)
+  }
 
   const activeTask = tasks.find((task) => task.id === activeTaskId)
 
@@ -68,6 +75,7 @@ export function Home() {
 
     setTasks((state) => [...state, newTask])
     setActiveTaskId(newTask.id)
+    setSecondsPassed(0)
 
     reset()
   }
@@ -111,7 +119,9 @@ export function Home() {
           value={{
             activeTask,
             activeTaskId,
+            secondsPassed,
             markCurrentTaskAsFinished,
+            updateSecondsPassed,
           }}
         >
           <FormProvider {...newTaskForm}>

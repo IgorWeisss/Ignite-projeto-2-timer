@@ -1,12 +1,16 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import { CounterContainer } from './styles'
 import { differenceInSeconds } from 'date-fns'
 import { TasksContext } from '../..'
 
 export function Countdown() {
-  const { activeTask, activeTaskId, markCurrentTaskAsFinished } =
-    useContext(TasksContext)
-  const [secondsPassed, setSecondsPassed] = useState(0)
+  const {
+    activeTask,
+    activeTaskId,
+    secondsPassed,
+    markCurrentTaskAsFinished,
+    updateSecondsPassed,
+  } = useContext(TasksContext)
 
   const taskTotalTimeInSeconds = activeTask ? activeTask.minutesAmount * 60 : 0
   const secondsLeft = activeTask ? taskTotalTimeInSeconds - secondsPassed : 0
@@ -27,10 +31,10 @@ export function Countdown() {
         )
         if (secondsDifference >= taskTotalTimeInSeconds) {
           markCurrentTaskAsFinished()
-          setSecondsPassed(taskTotalTimeInSeconds)
+          updateSecondsPassed(taskTotalTimeInSeconds)
           clearInterval(interval)
         }
-        setSecondsPassed(secondsDifference)
+        updateSecondsPassed(secondsDifference)
       }, 1000)
     }
 
@@ -42,6 +46,7 @@ export function Countdown() {
     activeTaskId,
     taskTotalTimeInSeconds,
     markCurrentTaskAsFinished,
+    updateSecondsPassed,
   ])
 
   useEffect(() => {
