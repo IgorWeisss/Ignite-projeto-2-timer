@@ -1,9 +1,9 @@
 import { Minus, Plus } from 'phosphor-react'
 import { FormContainer } from './styles'
 
-import { TasksContext } from '../..'
 import { useContext } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { TasksContext } from '../../../../Contexts/TasksContextProvider'
 
 export function NewTaskForm() {
   const { activeTask } = useContext(TasksContext)

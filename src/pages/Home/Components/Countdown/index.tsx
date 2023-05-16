@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { CounterContainer } from './styles'
 import { differenceInSeconds } from 'date-fns'
-import { TasksContext } from '../..'
+import { TasksContext } from '../../../../Contexts/TasksContextProvider'
 
 export function Countdown() {
   const {
