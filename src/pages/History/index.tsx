@@ -1,6 +1,8 @@
 import { useContext } from 'react'
 import { HystoryContainer, HystoryList, Status } from './styles'
 import { TasksContext } from '../../Contexts/TasksContextProvider'
+import { formatDistanceToNow } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
 
 export function History() {
   const { tasks } = useContext(TasksContext)
@@ -25,7 +27,12 @@ export function History() {
                 <tr key={task.id}>
                   <td>{task.projectName}</td>
                   <td>{task.minutesAmount} minutos</td>
-                  <td>{task.startTime.toISOString()}</td>
+                  <td>
+                    {formatDistanceToNow(task.startTime, {
+                      addSuffix: true,
+                      locale: ptBR,
+                    })}
+                  </td>
                   <td>
                     {task.finishedTime && (
                       <Status statusColor="green">Concluído</Status>
